@@ -15,6 +15,8 @@ const int colorR = 0;
 const int colorG = 255;
 const int colorB = 0;
 
+const int buttonPin = 3;
+int buttonState = 0;
 
 // Connect pin 1 (on the left) of the sensor to +5V
 // NOTE: If using a board with 3.3V logic like an Arduino Due connect pin 1
@@ -23,6 +25,7 @@ const int colorB = 0;
 // Connect pin 3 (on the right) of the sensor to GROUND (if your sensor has 3 pins)
 // Connect pin 4 (on the right) of the sensor to GROUND and leave the pin 3 EMPTY (if your sensor has 4 pins)
 // Connect a 10K resistor from pin 2 (data) to pin 1 (power) of the sensor
+// Connect a button from pin 2
 
 
 DHT dht(DHTPIN, DHTTYPE);
@@ -32,6 +35,8 @@ void setup() {
   Serial.println(F("DHTxx test!"));
   lcd.begin(16, 2);
   lcd.setRGB(colorR, colorG, colorB);
+
+  pinMode(buttonPin, INPUT);
 
   dht.begin();
 }
@@ -69,7 +74,12 @@ void loop() {
   Serial.print(t);
   Serial.println(F("°C "));
 
+// Use button to get Mold Reading when held
+  buttonState = digitalRead(buttonPin);
 
+  if (buttonState == LOW)
+  {
+    //Display Humidity and Temp
   lcd.setCursor(0, 0);
   lcd.print("Humidity: ");
   lcd.print(h);
@@ -87,9 +97,54 @@ void loop() {
  // Serial.print(F("°C "));
  // Serial.print(hif);
  // Serial.println(F("°F"));
-
-  
-
+  }
+  else
+  {
+    //Display Mold
+    MoldRisk(h,t);
+  }
   delay(100);
+}
+
+void MoldRisk(float humidity, float temp){
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Mold Risk:");
+  //HIGH RISK
+  if(humidity >= 60 || (temp >= 30 && temp <= 25))
+  {
+    bool h = humidity >= 60;
+    bool t = (temp <= 30 && temp >= 25);
+    lcd.print("High");
+    if(h && t)
+    {
+      lcd.setCursor(0, 1);
+      lcd.print("T and H:");
+    }
+    else if(h)
+    {  
+      lcd.setCursor(0, 1);
+      lcd.print("H of:");
+      lcd.print(humidity);
+    }
+    else if(t)
+    {
+      lcd.setCursor(0, 1);
+      lcd.print("T of:");
+      lcd.print(temp);
+    }
+  }
+  //LOW
+  else if((humidity >= 25 && humidity <=30) && (temp <= 30 && temp >= 25))
+  {
+    lcd.print("Low");
+    lcd.setCursor(0, 1);
+    lcd.print("Perfect T+H");
+  }
+  //NORMAL
+  else
+  {
+    lcd.print("Normal");
+  } 
 }
 
