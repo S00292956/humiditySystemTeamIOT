@@ -10,8 +10,6 @@ char pass[] = "qczqcdsz";
 char devid[] = "v9474515F6B6AEE6";
 // END MODIFY
 
-const int buttonPin = 3;
-
 char serverName[] = "api.pushingbox.com";
 
 WiFiClient client;
@@ -36,9 +34,6 @@ void setup() {
 
 void loop() {
 
-if (buttonState == LOW)
-  {
-
   int sensorValue = analogRead(A0);
 
   Serial.print("Sensor Value: ");
@@ -59,9 +54,6 @@ if (buttonState == LOW)
   else {
     Serial.println("Connection failed");
   }
-  }
-  else{
-    serial.println("Button Not Pressed");
-  }
+
   delay(5000);
 }
