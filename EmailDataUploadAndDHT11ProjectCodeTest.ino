@@ -4,7 +4,7 @@
 #include "DHT.h"
 #include <Wire.h>
 #include "rgb_lcd.h"
-#include "arduino_secrets.h"  // Ensure SECRET_SSID and SECRET_PASS are defined here
+
 
 // --- Configuration ---
 char ssid[] = "IOT-MPSK";
@@ -17,7 +17,7 @@ String urlPath = "/macros/s/AKfycbyAS94dO9l1y_GCBsv0GvId-xI8vyWUXaIQaTE-PfMfDo4f
 
 // PushingBox
 const char* host = "api.pushingbox.com";
-String deviceID = "vF8F263F5DE68AE3";
+String deviceID = "v9474515F6B6AEE6";
 
 // --- Hardware ---
 #define DHTPIN 2
